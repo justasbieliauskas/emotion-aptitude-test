@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php
+$messages = include 'src/messages.php';
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -33,29 +36,25 @@
                 </p>
             </form>
             <ul>
-                <li>
-                    <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
-                </li>
-                <li>
-                    <span>2010 01 01 08:59</span> <a href="mailto:example@example.com">Vardas Pavardė</a>, 13 m.<br/>
-                    Įkėlėme šeimos dienos akciją. Dėl papildomos medžiagos užtrukome šiek tiek ilgiau nei įprasta.
-                </li>
-                <li>
-                    <span>2010 01 01 08:59</span> Vardas Pavardė, 75 m. <br/>
-                    Įkėlėme šeimos dienos akciją. Dėl papildomos medžiagos užtrukome šiek tiek ilgiau nei įprasta.
-                </li>
-                <li>
-                    <span>2010 01 01 08:59</span> Vardas Pavardė, 10 m. <br/>
-                    Įkėlėme šeimos dienos akciją. Dėl papildomos medžiagos užtrukome šiek tiek ilgiau nei įprasta.
-                </li>
-                <li>
-                    <span>2010 01 01 08:59</span> <a href="mailto:example@example.com">Vardas Pavardė</a>, 25 m. <br/>
-                    Įkėlėme šeimos dienos akciją. Dėl papildomos medžiagos užtrukome šiek tiek ilgiau nei įprasta.
-                </li>
-                <li>
-                    <span>2010 01 01 08:59</span> Vardas Pavardė, 26 m. <br/>
-                    Įkėlėme šeimos dienos akciją. Dėl papildomos medžiagos užtrukome šiek tiek ilgiau nei įprasta.
-                </li>
+                <? if(empty($messages)): ?>
+                    <li>
+                        <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
+                    </li>
+                <? else: ?>
+                    <? foreach($messages as $message): ?>
+                        <li>
+                            <span><? echo $message['created_at']; ?></span> 
+                            <? if($message['email'] !== null): ?>
+                                <a href="mailto:<? echo $message['email']; ?>"><? echo $message['name']; ?></a>,
+                            <? else: ?>
+                                <? echo $message['name']; ?>,
+                            <? endif; ?>
+                            <? echo $message['age'] ?> m.
+                            <br/>
+                            <? echo $message['content']; ?>
+                        </li>
+                    <? endforeach ?>
+                <? endif; ?>
             </ul>
             <p id="pages">
                 <a href="#" title="atgal">atgal</a>
