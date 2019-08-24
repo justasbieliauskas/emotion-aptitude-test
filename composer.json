@@ -1,0 +1,19 @@
+{
+    "name": "justasbieliauskas/general-aptitude-test",
+    "description": "A skill evaluation task for emotion.",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Justas Bieliauskas",
+            "email": "justyvas0@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^2.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
