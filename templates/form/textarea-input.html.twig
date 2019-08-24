@@ -1,0 +1,7 @@
+{% extends "form/input.html.twig" %}
+
+{% block input %}
+<textarea id="{{ name }}" name="{{ name }}">
+    {{ value ?? '' }}
+</textarea>
+{% endblock %}

@@ -8,20 +8,7 @@
     <body>
         <div id="wrapper">
             <h1>Jūsų žinutės</h1>
-            <form method="post">
-                {% include "form/text-input.html.twig" with {'name': 'fullname', 'label': 'Vardas, pavardė', 'required': true, 'valid': false} %}
-                {% include "form/text-input.html.twig" with {'name': 'birthdate', 'label': 'Gimimo data', 'required': true, 'valid': true} %}
-                {% include "form/text-input.html.twig" with {'name': 'email', 'label': 'El.pašto adresas', 'required': false, 'valid': true} %}
-                <p class="err">
-                    <label for="message">Jūsų žinutė *</label><br/>
-                    <textarea id="message"></textarea>
-                </p>
-                <p>
-                    <span>* - privalomi laukai</span>
-                    <input type="submit" value="Skelbti" />
-                    <img src="img/ajax-loader.gif" alt="" />
-                </p>
-            </form>
+            {% include "form/form.html.twig" %}
             <ul>
                 <li>
                     <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
