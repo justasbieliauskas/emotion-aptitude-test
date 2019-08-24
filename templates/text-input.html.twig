@@ -1,0 +1,10 @@
+{% extends "input.html.twig" %}
+
+{% block input %}
+<input 
+    type="text"
+    id="{{ name }}"
+    name="{{ name }}"
+    value="{{ value ?? '' }}" 
+/>
+{% endblock %}
