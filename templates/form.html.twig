@@ -1,0 +1,11 @@
+<form method="post">
+    {% include "fields/text-input.html.twig" with {'name': 'fullname', 'label': 'Vardas, pavardė', 'required': true, 'valid': false} %}
+    {% include "fields/text-input.html.twig" with {'name': 'birthdate', 'label': 'Gimimo data', 'required': true, 'valid': true} %}
+    {% include "fields/text-input.html.twig" with {'name': 'email', 'label': 'El.pašto adresas', 'required': false, 'valid': true} %}
+    {% include "fields/textarea-input.html.twig" with {'name': 'message', 'label': 'Jūsų žinutė', 'required': true, 'valid': false} %}
+    <p>
+        <span>* - privalomi laukai</span>
+        <input type="submit" value="Skelbti" />
+        <img src="img/ajax-loader.gif" alt="" />
+    </p>
+</form>
