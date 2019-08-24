@@ -9,9 +9,9 @@
         <div id="wrapper">
             <h1>Jūsų žinutės</h1>
             <form method="post">
-                {% include "text-input.html.twig" with {'name': 'fullname', 'label': 'Vardas, pavardė', 'required': true, 'valid': false} %}
-                {% include "text-input.html.twig" with {'name': 'birthdate', 'label': 'Gimimo data', 'required': true, 'valid': true} %}
-                {% include "text-input.html.twig" with {'name': 'email', 'label': 'El.pašto adresas', 'required': false, 'valid': true} %}
+                {% include "form/text-input.html.twig" with {'name': 'fullname', 'label': 'Vardas, pavardė', 'required': true, 'valid': false} %}
+                {% include "form/text-input.html.twig" with {'name': 'birthdate', 'label': 'Gimimo data', 'required': true, 'valid': true} %}
+                {% include "form/text-input.html.twig" with {'name': 'email', 'label': 'El.pašto adresas', 'required': false, 'valid': true} %}
                 <p class="err">
                     <label for="message">Jūsų žinutė *</label><br/>
                     <textarea id="message"></textarea>
