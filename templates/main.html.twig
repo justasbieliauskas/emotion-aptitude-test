@@ -10,7 +10,10 @@
             <h1>Jūsų žinutės</h1>
             {% include "form.html.twig" %}
             {% include "messages.html.twig" %}
-            {% include "pages.html.twig" %}
+            {% include "pages.html.twig" with {
+                current: 3,
+                total: 5
+            } %}
         </div>
     </body>
 </html>

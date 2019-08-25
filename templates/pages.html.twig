@@ -1,8 +1,15 @@
 <p id="pages">
-    <a href="#" title="atgal">atgal</a>
-    <a href="#" title="1">1</a>
-    2
-    <a href="#" title="3">3</a>
-    <a href="#" title="4">4</a>
-    <a href="#" title="toliau">toliau</a>
+    {% if current > 1 %}
+        <a href="#" title="atgal">atgal</a>
+    {% endif %}
+    {% for page in range(1, total) %}
+        {% if page == current %}
+            {{ page }}
+        {% else %}
+            <a href="#" title="{{ page }}">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if current < total %}
+        <a href="#" title="toliau">toliau</a>
+    {% endif %}
 </p>
