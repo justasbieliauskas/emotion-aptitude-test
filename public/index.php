@@ -48,6 +48,9 @@ $pagesCount = ceil($messageCount / $perPage);
 $requestedPage = 1;
 if(isset($_GET['page']) && ctype_digit($_GET['page'])) {
     $requestedPage = (int) $_GET['page'];
+    if($requestedPage === 0) {
+        $requestedPage = 1;
+    }
     if($requestedPage > $pagesCount) {
         $requestedPage = $pagesCount;
     }
