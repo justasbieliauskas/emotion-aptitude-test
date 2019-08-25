@@ -1,8 +1,11 @@
 <ul>
-    {# <li>
-        <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
-    </li> #}
-    {% for message in messages %}
-        {% include "message.html.twig" with {created_at: '2010 01 01 08:59', email: message.email, name: 'Vardas Pavardė', age: 75, content: message.content} %}
-    {% endfor %}
+    {% if messages is empty %}
+        <li>
+            <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
+        </li>
+    {% else %}
+        {% for message in messages %}
+            {% include "message.html.twig" %}
+        {% endfor %}
+    {% endif %}
 </ul>

@@ -1,11 +1,11 @@
 <li>
-    <span>{{ created_at }}</span>
-    {% if email is not null %}
-        <a href="mailto:example@example.com">{{ name }}</a>,
+    <span>{{ message.created_at }}</span>
+    {% if message.email is not null %}
+        <a href="mailto:{{ message.email }}">{{ message.name }}</a>,
     {% else %}
-        {{ name }},
+        {{ message.name }},
     {% endif %}
-    {{ age }} m.
+    75 m.
     <br/>
-    {{ content }}
+    {{ message.content }}
 </li>
