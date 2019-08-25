@@ -1,9 +1,16 @@
 <form method="post">
     {% include "fields/text-input.html.twig" with {
-        name: 'fullname',
-        label: 'Vardas, pavardė',
+        name: 'firstname',
+        label: 'Vardas',
         required: true,
-        key: 'name'
+        key: 'firstname'
+    } %}
+
+    {% include "fields/text-input.html.twig" with {
+        name: 'lastname',
+        label: 'Pavardė',
+        required: true,
+        key: 'lastname'
     } %}
 
     {% include "fields/text-input.html.twig" with {

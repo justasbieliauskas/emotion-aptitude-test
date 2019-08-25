@@ -42,7 +42,7 @@ input, textarea {
     border: 1px solid #d9e0e5;
 }
 
-#fullname, #email, #birthdate, textarea {
+#firstname, #lastname, #email, #birthdate, textarea {
     width: 270px;
 }
 

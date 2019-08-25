@@ -1,9 +1,11 @@
+{% set name = "#{message.first_name} #{message.last_name}" %}
+
 <li>
     <span>{{ message.created_at }}</span>
     {% if message.email is not null %}
-        <a href="mailto:{{ message.email }}">{{ message.name }}</a>,
+        <a href="mailto:{{ message.email }}">{{ name }}</a>,
     {% else %}
-        {{ message.name }},
+        {{ name }},
     {% endif %}
     75 m.
     <br/>

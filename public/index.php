@@ -12,7 +12,11 @@ $session = [
     'post' => [
         'success' => false,
         'fields' => [
-            'name' => [
+            'firstname' => [
+                'value' => null,
+                'valid' => false,
+            ],
+            'lastname' => [
                 'value' => null,
                 'valid' => false,
             ],
