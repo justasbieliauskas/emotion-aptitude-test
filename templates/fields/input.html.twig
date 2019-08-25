@@ -1,3 +1,11 @@
+{% set field = {value: null, valid: true} %}
+{% if attribute(fields, key) is defined %}
+    {% set field = attribute(fields, key) %}
+{% endif %}
+
+{% set value = field.value %}
+{% set valid = field.valid %}
+
 <p{% if not valid %} class="err"{% endif %}>
     <label for="{{ name }}">
         {{ label }}{% if required %} *{% endif %}
