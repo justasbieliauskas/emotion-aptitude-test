@@ -10,6 +10,27 @@ $twig = new \Twig\Environment($loader);
 
 $db = new PDO('sqlite:' . __DIR__ . '/../sqlite.db');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$messages = $db->query('SELECT * FROM messages');
 
-echo $twig->render('main.html.twig', ['messages' => $messages]);
+$perPage = 3;
+
+$messageCount = $db->query('SELECT COUNT(*) FROM messages')->fetchColumn();
+$pagesCount = ceil($messageCount / $perPage);
+
+$requestedPage = 1;
+if(isset($_GET['page']) && ctype_digit($_GET['page'])) {
+    $requestedPage = (int) $_GET['page'];
+    if($requestedPage > $pagesCount) {
+        $requestedPage = $pagesCount;
+    }
+}
+
+$offset = ($requestedPage - 1) * $perPage;
+$messages = $db->query("SELECT * FROM messages LIMIT $perPage OFFSET $offset");
+
+echo $twig->render('main.html.twig', [
+    'messages' => [
+        'total' => $pagesCount,
+        'current' => $requestedPage,
+        'list' => $messages,
+    ],
+]);

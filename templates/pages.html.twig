@@ -1,15 +1,15 @@
 <p id="pages">
     {% if current > 1 %}
-        <a href="#" title="atgal">atgal</a>
+        <a href="index.php?page={{ current - 1 }}" title="atgal">atgal</a>
     {% endif %}
-    {% for page in range(1, total) %}
+    {% for page in 1..total %}
         {% if page == current %}
             {{ page }}
         {% else %}
-            <a href="#" title="{{ page }}">{{ page }}</a>
+            <a href="index.php?page={{ page }}" title="{{ page }}">{{ page }}</a>
         {% endif %}
     {% endfor %}
     {% if current < total %}
-        <a href="#" title="toliau">toliau</a>
+        <a href="index.php?page={{ current + 1 }}" title="toliau">toliau</a>
     {% endif %}
 </p>
