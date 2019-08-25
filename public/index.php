@@ -28,6 +28,24 @@ $offset = ($requestedPage - 1) * $perPage;
 $messages = $db->query("SELECT * FROM messages LIMIT $perPage OFFSET $offset");
 
 echo $twig->render('main.html.twig', [
+    'form' => [
+        'name' => [
+            'value' => null,
+            'valid' => false,
+        ],
+        'birthday' => [
+            'value' => '2009-03-25',
+            'valid' => true,
+        ],
+        'email' => [
+            'value' => 'foo@example.com',
+            'valid' => true,
+        ],
+        'content' => [
+            'value' => null,
+            'valid' => false,
+        ],
+    ],
     'messages' => [
         'total' => $pagesCount,
         'current' => $requestedPage,
