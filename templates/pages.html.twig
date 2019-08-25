@@ -1,15 +1,15 @@
 <p id="pages">
     {% if current > 1 %}
-        <a href="index.php?page={{ current - 1 }}" title="atgal">atgal</a>
+        {% include "page-link.html.twig" with {page: current - 1, title: 'atgal'} %}
     {% endif %}
     {% for page in 1..total %}
         {% if page == current %}
             {{ page }}
         {% else %}
-            <a href="index.php?page={{ page }}" title="{{ page }}">{{ page }}</a>
+            {% include "page-link.html.twig" with {title: page} %}
         {% endif %}
     {% endfor %}
     {% if current < total %}
-        <a href="index.php?page={{ current + 1 }}" title="toliau">toliau</a>
+        {% include "page-link.html.twig" with {page: current + 1, title: 'toliau'} %}
     {% endif %}
 </p>
