@@ -3,32 +3,32 @@
         name: 'fullname',
         label: 'Vardas, pavardė',
         required: true,
-        value: form.name.value,
-        valid: form.name.valid
+        value: fields.name.value,
+        valid: fields.name.valid
     } %}
 
     {% include "fields/text-input.html.twig" with {
         name: 'birthdate',
         label: 'Gimimo data',
         required: true,
-        value: form.birthday.value,
-        valid: form.birthday.valid
+        value: fields.birthday.value,
+        valid: fields.birthday.valid
     } %}
 
     {% include "fields/text-input.html.twig" with {
         name: 'email',
         label: 'El.pašto adresas',
         required: false,
-        value: form.email.value,
-        valid: form.email.valid
+        value: fields.email.value,
+        valid: fields.email.valid
     } %}
 
     {% include "fields/textarea-input.html.twig" with {
         name: 'message',
         label: 'Jūsų žinutė',
         required: true,
-        value: form.content.value,
-        valid: form.content.valid
+        value: fields.content.value,
+        valid: fields.content.valid
     } %}
     <p>
         <span>* - privalomi laukai</span>
