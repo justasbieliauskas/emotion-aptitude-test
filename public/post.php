@@ -92,9 +92,9 @@ function fieldsValid(array $fields): bool
 }
 
 $fields = validateFields($_POST, [
-    ['firstname', 'validateName', 'first_name'],
-    ['lastname', 'validateName', 'last_name'],
-    ['birthdate', 'validateBirthday', 'birthday'],
+    ['firstname', 'validateName', 'firstName'],
+    ['lastname', 'validateName', 'lastName'],
+    ['birthdate', 'validateBirthday', 'dateOfBirth'],
     ['email', 'validateEmail', 'email'],
     ['message', 'validateContent', 'content'],
 ]);
