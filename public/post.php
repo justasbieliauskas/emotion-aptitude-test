@@ -3,10 +3,10 @@ session_start();
 
 function validateName(?string $name): bool
 {
-    $name = trim($name);
-    if(empty($name)) {
+    if($name === null) {
         return false;
     }
+    $name = trim($name);
     if(strlen($name) > 255) {
         return false;
     }
@@ -18,11 +18,10 @@ function validateName(?string $name): bool
 
 function validateBirthday(?string $birthday): bool
 {
-    $birthday = trim($birthday);
-    if(empty($birthday)) {
+    if($birthday === null) {
         return false;
     }
-    $date = \DateTime::createFromFormat('Y-m-d', $birthday);
+    $date = \DateTime::createFromFormat('Y-m-d', trim($birthday));
     $errors = \DateTime::getLastErrors();
     $errorCount = $errors['warning_count'] + $errors['error_count'];
     if($errorCount > 0) {
@@ -41,11 +40,10 @@ function validateBirthday(?string $birthday): bool
 
 function validateEmail(?string $email): bool
 {
-    $email = trim($email);
-    if(empty($email)) {
+    if($email === null) {
         return true;
     }
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if(!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
         return false;
     }
     return true;
@@ -53,13 +51,9 @@ function validateEmail(?string $email): bool
 
 function validateContent(?string $content): bool
 {
-    if(empty($content)) {
+    if($content === null) {
         return false;
     }
-    if(ctype_space($content)) {
-        return false;
-    }
-    $content = $post['content'];
     $length = mb_strlen($content, 'UTF-8');
     if($length > 65535) {
         return false;
@@ -67,12 +61,24 @@ function validateContent(?string $content): bool
     return true;
 }
 
+function getFieldValue(array $post, string $key): ?string
+{
+    if(empty($post[$key])) {
+        return null;
+    }
+    $value = $post[$key];
+    if(ctype_space($value)) {
+        return null;
+    }
+    return $value;
+}
+
 function validateFields(array $post, array $controls): array
 {
     $validations = [];
     foreach($controls as $control) {
         list($srcKey, $validation, $destKey) = $control;
-        $value = $post[$srcKey] ?? null;
+        $value = getFieldValue($post, $srcKey);
         $validations[$destKey] = [
             'value' => $value,
             'valid' => $validation($value),
