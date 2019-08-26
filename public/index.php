@@ -1,6 +1,18 @@
 <?php
 session_start();
 
+function addAge(&$message): void
+{
+    $timeZone = new \DateTimeZone('Europe/Vilnius');
+    $now = new \DateTime('now', $timeZone);
+    $dateOfBirth = \DateTime::createFromFormat(
+        'Y-m-d',
+        $message['date_of_birth']
+    );
+    $diff = $dateOfBirth->diff($now);
+    $message['age'] = $diff->format('%y');
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Twig\Environment;
@@ -36,7 +48,9 @@ if(isset($_GET['page']) && ctype_digit($_GET['page'])) {
 $offset = ($requestedPage - 1) * $perPage;
 $sql = "SELECT * FROM messages ORDER BY id DESC LIMIT $perPage OFFSET $offset";
 
-$messages = $db->query($sql);
+$messages = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+array_walk($messages, 'addAge');
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
