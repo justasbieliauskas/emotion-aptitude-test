@@ -87,11 +87,24 @@ function areFieldsValid(array $fields): bool
     return true;
 }
 
-$post = [];
 $controls = [
     ['firstname', 'validateName', 'first_name'],
     ['lastname', 'validateName', 'last_name'],
-    ['birthday', 'validateBirthday', 'date_of_birth'],
+    ['birthdate', 'validateBirthday', 'date_of_birth'],
     ['email', 'validateEmail', 'email'],
-    ['content', 'validateContent', 'content'],
+    ['message', 'validateContent', 'content'],
 ];
+
+$fields = validateFields($_POST, $controls);
+
+echo "<pre>\n";
+echo json_encode($fields, JSON_PRETTY_PRINT) . PHP_EOL;
+echo "</pre>\n";
+
+echo "\n\n";
+
+if(areFieldsValid($fields)) {
+    echo "OK!\n";
+} else {
+    echo "Not okay...\n";
+}
