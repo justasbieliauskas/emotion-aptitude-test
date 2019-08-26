@@ -33,7 +33,9 @@ if(isset($_GET['page']) && ctype_digit($_GET['page'])) {
 }
 
 $offset = ($requestedPage - 1) * $perPage;
-$messages = $db->query("SELECT * FROM messages LIMIT $perPage OFFSET $offset");
+$sql = "SELECT * FROM messages ORDER BY id DESC LIMIT $perPage OFFSET $offset";
+
+$messages = $db->query($sql);
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
