@@ -12,6 +12,7 @@ $twig = new \Twig\Environment($loader);
 $fields = [];
 if(isset($_SESSION['invalid'])) {
     $fields = $_SESSION['invalid']['fields'];
+    unset($_SESSION['invalid']);
 }
 
 $db = include 'pdo.php';

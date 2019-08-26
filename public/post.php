@@ -6,7 +6,6 @@ function validateName(?string $name): bool
     if($name === null) {
         return false;
     }
-    $name = trim($name);
     if(strlen($name) > 255) {
         return false;
     }
@@ -21,7 +20,7 @@ function validateBirthday(?string $birthday): bool
     if($birthday === null) {
         return false;
     }
-    $date = \DateTime::createFromFormat('Y-m-d', trim($birthday));
+    $date = \DateTime::createFromFormat('Y-m-d', $birthday);
     $errors = \DateTime::getLastErrors();
     $errorCount = $errors['warning_count'] + $errors['error_count'];
     if($errorCount > 0) {
@@ -43,7 +42,7 @@ function validateEmail(?string $email): bool
     if($email === null) {
         return true;
     }
-    if(!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return false;
     }
     return true;
@@ -61,30 +60,89 @@ function validateContent(?string $content): bool
     return true;
 }
 
-function getFieldValue(array $post, string $key): ?string
+function getFieldValues(array $post, array $keys): array
 {
-    if(empty($post[$key])) {
-        return null;
+    $values = [];
+    foreach($keys as $key) {
+        $value = null;
+        if(!empty($post[$key]) && !ctype_space($post[$key])) {
+            $value = $post[$key];
+        }
+        $values[$key] = $value;
     }
-    $value = $post[$key];
-    if(ctype_space($value)) {
-        return null;
-    }
-    return $value;
+    return $values;
 }
 
-function validateFields(array $post, array $controls): array
+function trimFieldValues(array $fields, string $contentKey): array
+{
+    $trimedFields = [];
+    foreach($fields as $key => $value) {
+        $newValue = $value;
+        if(!empty($newValue)) {
+            if($key !== $contentKey) {
+                $newValue = trim($newValue);
+            }
+        }
+        $trimedFields[$key] = $newValue;
+    }
+    return $trimedFields;
+}
+
+function getFieldValidations(array $values, array $mapping): array
 {
     $validations = [];
-    foreach($controls as $control) {
-        list($srcKey, $validation, $destKey) = $control;
-        $value = getFieldValue($post, $srcKey);
-        $validations[$destKey] = [
-            'value' => $value,
-            'valid' => $validation($value),
-        ];
+    foreach($values as $key => $value) {
+        $validation = $mapping[$key];
+        $validations[$key] = $validation($value);
     }
     return $validations;
+}
+
+function joinFieldValuesWithValidations(array $values, array $validations): array
+{
+    $fields = [];
+    foreach($values as $key => $value) {
+        $fields[$key] = [
+            'value' => $value,
+            'valid' => $validations[$key],
+        ];
+    }
+    return $fields;
+}
+
+function changeFieldKeys(array $fields, array $mapping): array
+{
+    $newFields = [];
+    foreach ($fields as $key => $field) {
+        $newKey = $mapping[$key];
+        $newFields[$newKey] = $field;
+    }
+    return $newFields;
+}
+
+function getFields(array $post): array
+{
+    $values = getFieldValues(
+        $post,
+        ['firstname', 'lastname', 'birthdate', 'email', 'message']
+    );
+    $values = trimFieldValues($values, 'message');
+    $validations = getFieldValidations($values, [
+        'firstname' => 'validateName',
+        'lastname' => 'validateName',
+        'birthdate' => 'validateBirthday',
+        'email' => 'validateEmail',
+        'message' => 'validateContent',
+    ]);
+    $fields = joinFieldValuesWithValidations($values, $validations);
+    $fields = changeFieldKeys($fields, [
+        'firstname' => 'firstName',
+        'lastname' => 'lastName',
+        'birthdate' => 'dateOfBirth',
+        'email' => 'email',
+        'message' => 'content',
+    ]);
+    return $fields;
 }
 
 function fieldsValid(array $fields): bool
@@ -97,13 +155,7 @@ function fieldsValid(array $fields): bool
     return true;
 }
 
-$fields = validateFields($_POST, [
-    ['firstname', 'validateName', 'firstName'],
-    ['lastname', 'validateName', 'lastName'],
-    ['birthdate', 'validateBirthday', 'dateOfBirth'],
-    ['email', 'validateEmail', 'email'],
-    ['message', 'validateContent', 'content'],
-]);
+$fields = getFields($_POST);
 
 if(!fieldsValid($fields)) {
     $_SESSION['invalid'] = ['fields' => $fields];
@@ -114,17 +166,16 @@ if(!fieldsValid($fields)) {
     $sql = "INSERT INTO messages $attributes VALUES (?, ?, ?, ?, ?, ?)";
 
     $now = new \DateTime('now', new \DateTimeZone('Europe/Vilnius'));
+    $email = $fields['email']['value'];
 
-    $db->prepare($sql)->execute([
-        $fields['firstName']['value'],
-        $fields['lastName']['value'],
-        $fields['dateOfBirth']['value'],
-        $fields['email']['value'],
-        $fields['content']['value'],
-        $now->format('Y-m-d H:i:s')
-    ]);
-
-    unset($_SESSION['invalid']);
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(1, $fields['firstName']['value']);
+    $stmt->bindValue(2, $fields['lastName']['value']);
+    $stmt->bindValue(3, $fields['dateOfBirth']['value']);
+    $stmt->bindValue(4, $email, $email === null ? PDO::PARAM_INT : PDO::PARAM_STR);
+    $stmt->bindValue(5, $fields['content']['value']);
+    $stmt->bindValue(6, $now->format('Y-m-d H:i:s'));
+    $stmt->execute();
 }
 
 header('Location: index.php');
