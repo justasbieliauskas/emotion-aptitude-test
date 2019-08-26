@@ -14,8 +14,7 @@ if(isset($_SESSION['invalid'])) {
     $fields = $_SESSION['invalid']['fields'];
 }
 
-$db = new PDO('sqlite:' . __DIR__ . '/../sqlite.db');
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$db = include 'pdo.php';
 
 $perPage = 3;
 

@@ -102,6 +102,22 @@ $fields = validateFields($_POST, [
 if(!fieldsValid($fields)) {
     $_SESSION['invalid'] = ['fields' => $fields];
 } else {
+    $db = include 'pdo.php';
+
+    $attributes = '(first_name, last_name, date_of_birth, email, content, created_at)';
+    $sql = "INSERT INTO messages $attributes VALUES (?, ?, ?, ?, ?, ?)";
+
+    $now = new \DateTime('now', new \DateTimeZone('Europe/Vilnius'));
+
+    $db->prepare($sql)->execute([
+        $fields['firstName']['value'],
+        $fields['lastName']['value'],
+        $fields['dateOfBirth']['value'],
+        $fields['email']['value'],
+        $fields['content']['value'],
+        $now->format('Y-m-d H:i:s')
+    ]);
+
     unset($_SESSION['invalid']);
 }
 
