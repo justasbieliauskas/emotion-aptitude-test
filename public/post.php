@@ -65,5 +65,13 @@ function validateContent(array $post): bool
     return true;
 }
 
-$post = ['content' => ''];
-var_dump(validateContent($post));
+function getFields(array $post): array
+{
+    $fields = [];
+    $keys = ['firstname', 'lastname', 'birthday', 'email', 'content'];
+    foreach($keys as $key) {
+        $fields[$key] = $post[$key] ?? null;
+    }
+    return $fields;
+}
+
