@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -8,37 +9,9 @@ use Twig\Loader\FilesystemLoader;
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
 $twig = new \Twig\Environment($loader);
 
-$session = [
-    'post' => [
-        'success' => false,
-        'fields' => [
-            'firstname' => [
-                'value' => null,
-                'valid' => false,
-            ],
-            'lastname' => [
-                'value' => null,
-                'valid' => false,
-            ],
-            'birthday' => [
-                'value' => '2009-03-25',
-                'valid' => true,
-            ],
-            'email' => [
-                'value' => 'foo@example.com',
-                'valid' => true,
-            ],
-            'content' => [
-                'value' => null,
-                'valid' => false,
-            ],
-        ],
-    ],
-];
-
 $fields = [];
-if(isset($session['post']) && !$session['post']['success']) {
-    $fields = $session['post']['fields'];
+if(isset($_SESSION['invalid'])) {
+    $fields = $_SESSION['invalid']['fields'];
 }
 
 $db = new PDO('sqlite:' . __DIR__ . '/../sqlite.db');

@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function validateName(?string $name): bool
 {
@@ -55,6 +56,9 @@ function validateContent(?string $content): bool
     if(empty($content)) {
         return false;
     }
+    if(ctype_space($content)) {
+        return false;
+    }
     $content = $post['content'];
     $length = mb_strlen($content, 'UTF-8');
     if($length > 65535) {
@@ -77,7 +81,7 @@ function validateFields(array $post, array $controls): array
     return $validations;
 }
 
-function areFieldsValid(array $fields): bool
+function fieldsValid(array $fields): bool
 {
     foreach($fields as $field) {
         if(!$field['valid']) {
@@ -87,24 +91,18 @@ function areFieldsValid(array $fields): bool
     return true;
 }
 
-$controls = [
+$fields = validateFields($_POST, [
     ['firstname', 'validateName', 'first_name'],
     ['lastname', 'validateName', 'last_name'],
-    ['birthdate', 'validateBirthday', 'date_of_birth'],
+    ['birthdate', 'validateBirthday', 'birthday'],
     ['email', 'validateEmail', 'email'],
     ['message', 'validateContent', 'content'],
-];
+]);
 
-$fields = validateFields($_POST, $controls);
-
-echo "<pre>\n";
-echo json_encode($fields, JSON_PRETTY_PRINT) . PHP_EOL;
-echo "</pre>\n";
-
-echo "\n\n";
-
-if(areFieldsValid($fields)) {
-    echo "OK!\n";
+if(!fieldsValid($fields)) {
+    $_SESSION['invalid'] = ['fields' => $fields];
 } else {
-    echo "Not okay...\n";
+    unset($_SESSION['invalid']);
 }
+
+header('Location: index.php');
