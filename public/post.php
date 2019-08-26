@@ -1,11 +1,11 @@
 <?php
 
-function validateName(array $post, string $key): bool
+function validateName(?string $name): bool
 {
-    if(empty($post[$key])) {
+    $name = trim($name);
+    if(empty($name)) {
         return false;
     }
-    $name = trim($post[$key]);
     if(strlen($name) > 255) {
         return false;
     }
@@ -15,12 +15,13 @@ function validateName(array $post, string $key): bool
     return true;
 }
 
-function validateBirthday(array $post): bool
+function validateBirthday(?string $birthday): bool
 {
-    if(empty($post['birthday'])) {
+    $birthday = trim($birthday);
+    if(empty($birthday)) {
         return false;
     }
-    $date = \DateTime::createFromFormat('Y-m-d', trim($post['birthday']));
+    $date = \DateTime::createFromFormat('Y-m-d', $birthday);
     $errors = \DateTime::getLastErrors();
     $errorCount = $errors['warning_count'] + $errors['error_count'];
     if($errorCount > 0) {
@@ -37,12 +38,9 @@ function validateBirthday(array $post): bool
     return true;
 }
 
-function validateEmail(array $post): bool
+function validateEmail(?string $email): bool
 {
-    if(!isset($post['email'])) {
-        return true;
-    }
-    $email = trim($post['email']);
+    $email = trim($email);
     if(empty($email)) {
         return true;
     }
@@ -52,9 +50,9 @@ function validateEmail(array $post): bool
     return true;
 }
 
-function validateContent(array $post): bool
+function validateContent(?string $content): bool
 {
-    if(empty($post['content'])) {
+    if(empty($content)) {
         return false;
     }
     $content = $post['content'];
@@ -65,13 +63,35 @@ function validateContent(array $post): bool
     return true;
 }
 
-function getFields(array $post): array
+function validateFields(array $post, array $controls): array
 {
-    $fields = [];
-    $keys = ['firstname', 'lastname', 'birthday', 'email', 'content'];
-    foreach($keys as $key) {
-        $fields[$key] = $post[$key] ?? null;
+    $validations = [];
+    foreach($controls as $control) {
+        list($srcKey, $validation, $destKey) = $control;
+        $value = $post[$srcKey] ?? null;
+        $validations[$destKey] = [
+            'value' => $value,
+            'valid' => $validation($value),
+        ];
     }
-    return $fields;
+    return $validations;
 }
 
+function areFieldsValid(array $fields): bool
+{
+    foreach($fields as $field) {
+        if(!$field['valid']) {
+            return false;
+        }
+    }
+    return true;
+}
+
+$post = [];
+$controls = [
+    ['firstname', 'validateName', 'first_name'],
+    ['lastname', 'validateName', 'last_name'],
+    ['birthday', 'validateBirthday', 'date_of_birth'],
+    ['email', 'validateEmail', 'email'],
+    ['content', 'validateContent', 'content'],
+];
