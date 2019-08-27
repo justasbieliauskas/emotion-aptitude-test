@@ -1,33 +1,33 @@
 <form id="message-form" action="post.php" method="post">
-    {% include "fields/text-input.html.twig" with {
+    {% include "partials/fields/_text-input.html.twig" with {
         name: 'firstname',
         label: 'Vardas',
         required: true,
         key: 'firstName'
     } %}
 
-    {% include "fields/text-input.html.twig" with {
+    {% include "partials/fields/_text-input.html.twig" with {
         name: 'lastname',
         label: 'Pavardė',
         required: true,
         key: 'lastName'
     } %}
 
-    {% include "fields/text-input.html.twig" with {
+    {% include "partials/fields/_text-input.html.twig" with {
         name: 'birthdate',
         label: 'Gimimo data',
         required: true,
         key: 'dateOfBirth'
     } %}
 
-    {% include "fields/text-input.html.twig" with {
+    {% include "partials/fields/_text-input.html.twig" with {
         name: 'email',
         label: 'El.pašto adresas',
         required: false,
         key: 'email'
     } %}
 
-    {% include "fields/textarea-input.html.twig" with {
+    {% include "partials/fields/_textarea-input.html.twig" with {
         name: 'message',
         label: 'Jūsų žinutė',
         required: true,

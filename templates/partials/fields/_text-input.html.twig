@@ -1,0 +1,11 @@
+{% extends "partials/fields/_input.html.twig" %}
+
+{% block input %}
+<input 
+    type="text"
+    id="{{ name }}"
+    class="message-field"
+    name="{{ name }}"
+    value="{{ value ?? '' }}" 
+/>
+{% endblock %}
