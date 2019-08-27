@@ -18,6 +18,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
+use App\Template\PageVars;
+
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
 $twig = new \Twig\Environment($loader);
 
@@ -27,25 +29,20 @@ if(isset($_SESSION['invalid'])) {
     unset($_SESSION['invalid']);
 }
 
-include 'include/db.php';
+$perPage = 3;
+
+require 'include/db.php';
 
 $db = getDB();
 
-$perPage = 3;
+$pageVars = (new PageVars(
+    $db,
+    $_GET,
+    'page',
+    $perPage
+))->toArray('current', 'perPage', 'total');
 
-$messageCount = $db->query('SELECT COUNT(*) FROM messages')->fetchColumn();
-$pagesCount = ceil($messageCount / $perPage);
-
-$requestedPage = 1;
-if(isset($_GET['page']) && ctype_digit($_GET['page'])) {
-    $requestedPage = (int) $_GET['page'];
-    if($requestedPage === 0) {
-        $requestedPage = 1;
-    }
-    if($requestedPage > $pagesCount) {
-        $requestedPage = $pagesCount;
-    }
-}
+$requestedPage = $pageVars['current'];
 
 $offset = ($requestedPage - 1) * $perPage;
 $sql = "SELECT * FROM messages ORDER BY id DESC LIMIT $perPage OFFSET $offset";
@@ -56,10 +53,5 @@ array_walk($messages, 'addAge');
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
-    'messages' => [
-        'total' => $pagesCount,
-        'current' => $requestedPage,
-        'perPage' => $perPage,
-        'list' => $messages,
-    ],
+    'messages' => $pageVars + ['list' => $messages],
 ]);
