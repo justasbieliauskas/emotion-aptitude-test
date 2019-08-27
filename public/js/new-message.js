@@ -25,16 +25,20 @@ function clearMarkedFields() {
     });
 }
 
-function markFields(fields) {
+function markField(valid, $field) {
+    if(valid) {
+        toggleDisabled($field, true);
+    } else {
+        $field.parent().addClass('err');
+    }
+}
+
+function processFields(fields) {
     for(var name in fields) {
-        var valid = fields[name];
         var selector = '.message-field[name=' + name + ']';
         var $field = $(selector);
-        if(valid) {
-            toggleDisabled($field, true);
-        } else {
-            $field.parent().addClass('err');
-        }
+        markField(fields[name].valid, $field);
+        $field.val(fields[name].value);
     }
 }
 
@@ -64,7 +68,7 @@ function onResponse(response) {
     clearMarkedFields();
     toggleLoader();
     if(!response.valid) {
-        markFields(response.errors);
+        processFields(response.errors);
     } else {
         addNewMessage(response.html);
         clearFields();
