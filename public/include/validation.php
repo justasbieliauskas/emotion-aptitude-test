@@ -72,19 +72,23 @@ function getFieldValues(array $post, array $keys): array
     return $values;
 }
 
-function trimFieldValues(array $fields, string $contentKey): array
+function transformContentField(string $value): string
 {
-    $trimedFields = [];
+    return trim(strip_tags($value));
+}
+
+function transformFieldValues(array $fields, array $mapping): array
+{
+    $newFields = [];
     foreach($fields as $key => $value) {
-        $newValue = $value;
-        if(!empty($newValue)) {
-            if($key !== $contentKey) {
-                $newValue = trim($newValue);
-            }
+        $newValue = null;
+        if($value !== null) {
+            $transform = $mapping[$key];
+            $newValue = $transform($value);
         }
-        $trimedFields[$key] = $newValue;
+        $newFields[$key] = $newValue;
     }
-    return $trimedFields;
+    return $newFields;
 }
 
 function getFieldValidations(array $values, array $mapping): array
@@ -125,7 +129,13 @@ function getFields(array $post): array
         $post,
         ['firstname', 'lastname', 'birthdate', 'email', 'message']
     );
-    $values = trimFieldValues($values, 'message');
+    $values = transformFieldValues($values, [
+        'firstname' => 'rtrim',
+        'lastname' => 'rtrim',
+        'birthdate' => 'rtrim',
+        'email' => 'rtrim',
+        'message' => 'transformContentField',
+    ]);
     $validations = getFieldValidations($values, [
         'firstname' => 'validateName',
         'lastname' => 'validateName',
