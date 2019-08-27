@@ -13,23 +13,20 @@ function toggleLoader() {
     $('#loader').toggle();
 }
 
-function toggleDisabled($field, disable) {
+function disableField($field, disable) {
     $field.prop('readonly', disable);
     $field.css('pointer-events', disable ? 'none' : 'initial');
 }
 
-function clearMarkedFields() {
-    $('.message-field').each(function() {
-        $(this).parent().removeClass('err');
-        toggleDisabled($(this), false);
-    });
-}
-
-function markField(valid, $field) {
+function processField(valid, $field) {
+    var $parent = $field.parent();
     if(valid) {
-        toggleDisabled($field, true);
+        if($parent.hasClass('err')) {
+            $parent.removeClass('err');
+        }
     } else {
-        $field.parent().addClass('err');
+        disableField($field, false);
+        $parent.addClass('err');
     }
 }
 
@@ -37,8 +34,8 @@ function processFields(fields) {
     for(var name in fields) {
         var selector = '.message-field[name=' + name + ']';
         var $field = $(selector);
-        markField(fields[name].valid, $field);
         $field.val(fields[name].value);
+        processField(fields[name].valid, $field);
     }
 }
 
@@ -64,14 +61,25 @@ function clearFields() {
     $('.message-field').val(null);
 }
 
+function disableAllFields(disable) {
+    $('.message-field').each(function() {
+        disableField($(this), disable);
+    });
+}
+
+function removeMarkings() {
+    $('.message-field').parent('p').removeClass('err');
+}
+
 function onResponse(response) {
-    clearMarkedFields();
     toggleLoader();
     if(!response.valid) {
         processFields(response.errors);
     } else {
         addNewMessage(response.html);
         clearFields();
+        disableAllFields(false);
+        removeMarkings();
     }
 }
 
@@ -85,6 +93,7 @@ $(document).ready(function () {
         e.preventDefault();
         var data = $(this).serializeObject();
         toggleLoader();
+        disableAllFields(true);
         $.post('post-ajax.php', data, onResponse, 'json');
     });
 });
