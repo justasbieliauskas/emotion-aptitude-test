@@ -8,10 +8,6 @@ function formArrayToObject(array) {
     return obj;
 }
 
-function prependNewMessage(messageHtml) {
-    $('#message-list').prepend(messageHtml);
-}
-
 function clearMarkedFields() {
     $('.message-field').parents('p').each(function() {
         $(this).removeClass('err');
@@ -28,12 +24,35 @@ function markFields(fields) {
     }
 }
 
+function handleLastMessage() {
+    var perPage = $('#message-list').data('per-page');
+    var messages = $('#message-list li');
+    if(messages.length > perPage) {
+        messages.last().remove();
+    }
+}
+
+function addNewMessage(html) {
+    if($('#empty-message').length > 0) {
+        $('#empty-message').remove();
+        $('#message-list').append(html);
+    } else {
+        $('#message-list').prepend(html);
+        handleLastMessage();
+    }
+}
+
+function clearFields() {
+    $('.message-field').val(null);
+}
+
 function onResponse(response) {
     clearMarkedFields();
     if(!response.valid) {
         markFields(response.errors);
     } else {
-        alert('Valid.');
+        addNewMessage(response.html);
+        clearFields();
     }
 }
 
