@@ -57,6 +57,7 @@ echo $twig->render('main.html.twig', [
     'messages' => [
         'total' => $pagesCount,
         'current' => $requestedPage,
+        'perPage' => $perPage,
         'list' => $messages,
     ],
 ]);

@@ -9,7 +9,10 @@
         <div id="wrapper">
             <h1>Jūsų žinutės</h1>
             {% include "form.html.twig" %}
-            {% include "messages.html.twig" with {messages: messages.list} %}
+            {% include "messages.html.twig" with {
+                messages: messages.list,
+                perPage: messages.perPage
+            } %}
             {% include "pages.html.twig" with {
                 current: messages.current,
                 total: messages.total

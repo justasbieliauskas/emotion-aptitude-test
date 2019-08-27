@@ -1,6 +1,6 @@
-<ul>
+<ul id="message-list" data-per-page="{{ perPage }}">
     {% if messages is empty %}
-        <li>
+        <li id="empty-message">
             <strong>Šiuo metu žinučių nėra. Būk pirmas!</strong>
         </li>
     {% else %}
