@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'db.php';
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -15,6 +16,8 @@ $fields = getFields($_POST);
 header('Content-Type: application/json');
 
 if(fieldsValid($fields)) {
+    insertToDB($fields);
+
     $dateOfBirth = \DateTime::createFromFormat('Y-m-d', $fields['dateOfBirth']['value']);
     $now = new \DateTime('now', new \DateTimeZone('Europe/Vilnius'));
 

@@ -2,28 +2,14 @@
 session_start();
 
 require 'validation.php';
+require 'db.php';
 
 $fields = getFields($_POST);
 
 if(!fieldsValid($fields)) {
     $_SESSION['invalid'] = ['fields' => $fields];
 } else {
-    $db = include 'pdo.php';
-
-    $attributes = '(first_name, last_name, date_of_birth, email, content, created_at)';
-    $sql = "INSERT INTO messages $attributes VALUES (?, ?, ?, ?, ?, ?)";
-
-    $now = new \DateTime('now', new \DateTimeZone('Europe/Vilnius'));
-    $email = $fields['email']['value'];
-
-    $stmt = $db->prepare($sql);
-    $stmt->bindValue(1, $fields['firstName']['value']);
-    $stmt->bindValue(2, $fields['lastName']['value']);
-    $stmt->bindValue(3, $fields['dateOfBirth']['value']);
-    $stmt->bindValue(4, $email, $email === null ? PDO::PARAM_INT : PDO::PARAM_STR);
-    $stmt->bindValue(5, $fields['content']['value']);
-    $stmt->bindValue(6, $now->format('Y-m-d H:i:s'));
-    $stmt->execute();
+    insertToDB();
 }
 
 header('Location: index.php');

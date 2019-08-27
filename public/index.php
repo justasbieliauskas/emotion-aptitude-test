@@ -27,7 +27,9 @@ if(isset($_SESSION['invalid'])) {
     unset($_SESSION['invalid']);
 }
 
-$db = include 'pdo.php';
+include 'db.php';
+
+$db = getDB();
 
 $perPage = 3;
 
