@@ -9,7 +9,7 @@ $fields = getFields($_POST);
 if(!fieldsValid($fields)) {
     $_SESSION['invalid'] = ['fields' => $fields];
 } else {
-    insertToDB();
+    insertToDB($fields);
 }
 
 header('Location: index.php');

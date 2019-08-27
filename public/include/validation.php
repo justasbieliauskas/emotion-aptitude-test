@@ -72,9 +72,11 @@ function getFieldValues(array $post, array $keys): array
     return $values;
 }
 
-function transformContentField(string $value): string
+function transformContentField(string $content): ?string
 {
-    return trim(strip_tags($value));
+    $content = strip_tags($content);
+    $content = trim($content);
+    return empty($content) ? null : $content;
 }
 
 function transformFieldValues(array $fields, array $mapping): array
