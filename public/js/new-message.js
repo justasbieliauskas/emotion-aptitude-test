@@ -8,6 +8,11 @@ function formArrayToObject(array) {
     return obj;
 }
 
+function toggleLoader() {
+    $('#submit-message').toggle();
+    $('#loader').toggle();
+}
+
 function clearMarkedFields() {
     $('.message-field').parents('p').each(function() {
         $(this).removeClass('err');
@@ -48,6 +53,7 @@ function clearFields() {
 
 function onResponse(response) {
     clearMarkedFields();
+    toggleLoader();
     if(!response.valid) {
         markFields(response.errors);
     } else {
@@ -65,6 +71,7 @@ $(document).ready(function () {
     $('#message-form').submit(function (e) {
         e.preventDefault();
         var data = $(this).serializeObject();
+        toggleLoader();
         $.post('post-ajax.php', data, onResponse, 'json');
     });
 });
