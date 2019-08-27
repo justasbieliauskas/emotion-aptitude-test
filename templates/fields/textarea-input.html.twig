@@ -1,7 +1,11 @@
 {% extends "fields/input.html.twig" %}
 
 {% block input %}
-<textarea id="{{ name }}" name="{{ name }}">
+<textarea
+    id="{{ name }}"
+    class="message-field"
+    name="{{ name }}"
+>
     {{ value ?? '' }}
 </textarea>
 {% endblock %}

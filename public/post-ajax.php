@@ -35,11 +35,11 @@ if(fieldsValid($fields)) {
     $response = [
         'valid' => false,
         'errors' => [
-            'first_name' => $fields['firstName']['valid'],
-            'last_name' => $fields['lastName']['valid'],
-            'date_of_birth' => $fields['dateOfBirth']['valid'],
+            'firstname' => $fields['firstName']['valid'],
+            'lastname' => $fields['lastName']['valid'],
+            'birthdate' => $fields['dateOfBirth']['valid'],
             'email' => $fields['email']['valid'],
-            'content' => $fields['content']['valid'],
+            'message' => $fields['content']['valid'],
         ],
     ];
 }

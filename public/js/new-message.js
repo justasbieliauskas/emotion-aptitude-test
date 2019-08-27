@@ -12,8 +12,29 @@ function prependNewMessage(messageHtml) {
     $('#message-list').prepend(messageHtml);
 }
 
+function clearMarkedFields() {
+    $('.message-field').parents('p').each(function() {
+        $(this).removeClass('err');
+    });
+}
+
+function markFields(fields) {
+    for(var name in fields) {
+        var valid = fields[name];
+        if(!valid) {
+            var selector = '.message-field[name=' + name + ']';
+            $(selector).parent().addClass('err');
+        }
+    }
+}
+
 function onResponse(response) {
-    console.log(response);
+    clearMarkedFields();
+    if(!response.valid) {
+        markFields(response.errors);
+    } else {
+        alert('Valid.');
+    }
 }
 
 $(document).ready(function () {
