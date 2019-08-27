@@ -13,10 +13,14 @@
                 messages: messages.list,
                 perPage: messages.perPage
             } %}
-            {% include "pages.html.twig" with {
-                current: messages.current,
-                total: messages.total
-            } %}
+
+            {% if messages.total > 0 %}
+                {% include "pages.html.twig" with {
+                    current: messages.current,
+                    total: messages.total
+                } %}
+            {% endif %}
+
         </div>
 
         <script
