@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require 'validation.php';
-require 'db.php';
+require 'include/validation.php';
+require 'include/db.php';
 
 $fields = getFields($_POST);
 

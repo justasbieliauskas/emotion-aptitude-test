@@ -27,7 +27,7 @@ if(isset($_SESSION['invalid'])) {
     unset($_SESSION['invalid']);
 }
 
-include 'db.php';
+include 'include/db.php';
 
 $db = getDB();
 
