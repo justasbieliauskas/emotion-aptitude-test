@@ -13,18 +13,27 @@ function toggleLoader() {
     $('#loader').toggle();
 }
 
+function toggleDisabled($field, disable) {
+    $field.prop('readonly', disable);
+    $field.css('pointer-events', disable ? 'none' : 'initial');
+}
+
 function clearMarkedFields() {
-    $('.message-field').parents('p').each(function() {
-        $(this).removeClass('err');
+    $('.message-field').each(function() {
+        $(this).parent().removeClass('err');
+        toggleDisabled($(this), false);
     });
 }
 
 function markFields(fields) {
     for(var name in fields) {
         var valid = fields[name];
-        if(!valid) {
-            var selector = '.message-field[name=' + name + ']';
-            $(selector).parent().addClass('err');
+        var selector = '.message-field[name=' + name + ']';
+        var $field = $(selector);
+        if(valid) {
+            toggleDisabled($field, true);
+        } else {
+            $field.parent().addClass('err');
         }
     }
 }
