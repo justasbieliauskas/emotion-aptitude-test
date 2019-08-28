@@ -50,23 +50,29 @@ $currentPage = new PageUnderLimit(
     $pageCount
 );
 
-$currentPage = $currentPage->toInt();
-$perPage = $perPage->toInt();
-$pageCount = $pageCount->toInt();
+use App\Sql\OrderClause;
+use App\Sql\SelectClause;
+use App\Sql\PageLimitClause;
 
-$offset = ($currentPage - 1) * $perPage;
-$sql = "SELECT * FROM messages ORDER BY id DESC LIMIT $perPage OFFSET $offset";
+$sql = new PageLimitClause(
+    new OrderClause(
+        new SelectClause('messages'),
+        'id'
+    ),
+    $currentPage,
+    $perPage
+);
 
-$messages = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$messages = $db->query($sql->asString())->fetchAll(PDO::FETCH_ASSOC);
 
 array_walk($messages, 'addAge');
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
     'messages' => [
-        'current' => $currentPage,
-        'perPage' => $perPage,
-        'total' => $pageCount,
+        'current' => $currentPage->toInt(),
+        'perPage' => $perPage->toInt(),
+        'total' => $pageCount->toInt(),
         'list' => $messages,
     ],
 ]);
