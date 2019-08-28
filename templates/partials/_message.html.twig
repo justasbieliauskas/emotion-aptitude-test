@@ -1,7 +1,7 @@
-{% set name = "#{message.first_name} #{message.last_name}" %}
+{% set name = "#{message.firstName} #{message.lastName}" %}
 
 <li>
-    <span>{{ message.created_at|date('Y-m-d H:i') }}</span>
+    <span>{{ message.createdAt|date('Y-m-d H:i') }}</span>
     {% if message.email is not null %}
         <a href="mailto:{{ message.email }}">{{ name }}</a>,
     {% else %}

@@ -1,24 +1,10 @@
 <?php
 session_start();
 
-function addAge(&$message): void
-{
-    $timeZone = new \DateTimeZone('Europe/Vilnius');
-    $now = new \DateTime('now', $timeZone);
-    $dateOfBirth = \DateTime::createFromFormat(
-        'Y-m-d',
-        $message['date_of_birth']
-    );
-    $diff = $dateOfBirth->diff($now);
-    $message['age'] = $diff->format('%y');
-}
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-
-use App\Template\PageVars;
 
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
 $twig = new \Twig\Environment($loader);
@@ -63,9 +49,9 @@ $sql = new PageLimitClause(
     $perPage
 );
 
-$messages = $db->query($sql->asString())->fetchAll(PDO::FETCH_ASSOC);
+use App\Entity\DbMessages;
 
-array_walk($messages, 'addAge');
+$messages = new DbMessages($sql, $db);
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
