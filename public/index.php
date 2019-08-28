@@ -29,22 +29,32 @@ if(isset($_SESSION['invalid'])) {
     unset($_SESSION['invalid']);
 }
 
-$perPage = 3;
-
 require 'include/db.php';
 
 $db = getDB();
 
-$pageVars = (new PageVars(
-    $db,
-    $_GET,
-    'page',
-    $perPage
-))->toArray('current', 'perPage', 'total');
+use App\Page\PositivePage;
+use App\Page\PageUnderLimit;
+use App\Page\PerPageConstant;
+use App\Page\QueryStringPage;
+use App\Entity\PDOMessageCount;
+use App\Page\PageCountFromTotal;
 
-$requestedPage = $pageVars['current'];
+$perPage = new PerPageConstant(3);
+$messageCount = new PDOMessageCount($db);
+$pageCount = new PageCountFromTotal($messageCount, $perPage);
+$currentPage = new PageUnderLimit(
+    new PositivePage(
+        new QueryStringPage($_GET, 'page', 1)
+    ),
+    $pageCount
+);
 
-$offset = ($requestedPage - 1) * $perPage;
+$currentPage = $currentPage->toInt();
+$perPage = $perPage->toInt();
+$pageCount = $pageCount->toInt();
+
+$offset = ($currentPage - 1) * $perPage;
 $sql = "SELECT * FROM messages ORDER BY id DESC LIMIT $perPage OFFSET $offset";
 
 $messages = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
@@ -53,5 +63,10 @@ array_walk($messages, 'addAge');
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
-    'messages' => $pageVars + ['list' => $messages],
+    'messages' => [
+        'current' => $currentPage,
+        'perPage' => $perPage,
+        'total' => $pageCount,
+        'list' => $messages,
+    ],
 ]);
