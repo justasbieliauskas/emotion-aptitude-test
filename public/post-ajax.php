@@ -23,14 +23,14 @@ if(fieldsValid($fields)) {
 
     $response = [
         'valid' => true,
-        'html' => $twig->render('message.html.twig', [
+        'html' => $twig->render('partials/_message.html.twig', [
             'message' => [
-                'first_name' => $fields['firstName']['value'],
-                'last_name' => $fields['lastName']['value'],
+                'firstName' => $fields['firstName']['value'],
+                'lastName' => $fields['lastName']['value'],
                 'age' => $dateOfBirth->diff($now)->format('%y'),
                 'email' => $fields['email']['value'],
                 'content' => $fields['content']['value'],
-                'created_at' => $now->format('Y-m-d H:i:s'),
+                'createdAt' => $now->format('Y-m-d H:i:s'),
             ],
         ]),
     ];
