@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sql;
+namespace App\Db\Sql\Clause;
 
 class SelectClause implements ClauseInterface
 {

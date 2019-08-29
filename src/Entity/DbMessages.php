@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use PDO;
 use IteratorAggregate;
-use App\Sql\ClauseInterface;
+use App\Db\Sql\Clause\ClauseInterface;
 
 class DbMessages implements IteratorAggregate
 {

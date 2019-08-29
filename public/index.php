@@ -43,9 +43,9 @@ $pageDTO
     ->setTotal($pageCount->toInt())
     ->setPerPage($perPage->toInt());
 
-use App\Sql\OrderClause;
-use App\Sql\SelectClause;
-use App\Sql\PageLimitClause;
+use App\Db\Sql\Clause\OrderClause;
+use App\Db\Sql\Clause\SelectClause;
+use App\Db\Sql\Clause\PageLimitClause;
 
 $sql = new PageLimitClause(
     new OrderClause(new SelectClause('messages'), 'id', 'DESC'),
