@@ -19,6 +19,7 @@ require 'include/db.php';
 
 $db = getDB();
 
+use App\Page\PageDTO;
 use App\Page\PositivePage;
 use App\Page\PageUnderLimit;
 use App\Page\PerPageConstant;
@@ -36,6 +37,12 @@ $currentPage = new PageUnderLimit(
     $pageCount
 );
 
+$pageDTO = new PageDTO();
+$pageDTO
+    ->setCurrent($currentPage->toInt())
+    ->setTotal($pageCount->toInt())
+    ->setPerPage($perPage->toInt());
+
 use App\Sql\OrderClause;
 use App\Sql\SelectClause;
 use App\Sql\PageLimitClause;
@@ -52,10 +59,6 @@ $messages = new DbMessages($sql, $db);
 
 echo $twig->render('main.html.twig', [
     'fields' => $fields,
-    'messages' => [
-        'current' => $currentPage->toInt(),
-        'perPage' => $perPage->toInt(),
-        'total' => $pageCount->toInt(),
-        'list' => $messages,
-    ],
+    'page' => $pageDTO,
+    'messages' => $messages,
 ]);

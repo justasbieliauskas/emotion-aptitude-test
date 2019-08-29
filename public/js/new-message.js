@@ -57,6 +57,10 @@ function addNewMessage(html) {
     }
 }
 
+function changePages(pagesHtml) {
+    $("#pages").html(pagesHtml);
+}
+
 function clearFields() {
     $('.message-field').val(null);
 }
@@ -76,11 +80,17 @@ function onResponse(response) {
     if(!response.valid) {
         processFields(response.errors);
     } else {
-        addNewMessage(response.html);
+        addNewMessage(response.html.message);
+        changePages(response.html.pages);
         clearFields();
         disableAllFields(false);
         removeMarkings();
     }
+}
+
+function getCurrentPage() {
+    var value = $('#pages').data('current');
+    return parseInt(value);
 }
 
 $(document).ready(function () {
@@ -92,6 +102,7 @@ $(document).ready(function () {
     $('#message-form').submit(function (e) {
         e.preventDefault();
         var data = $(this).serializeObject();
+        data.currentPage = getCurrentPage();
         toggleLoader();
         disableAllFields(true);
         $.post('post-ajax.php', data, onResponse, 'json');
