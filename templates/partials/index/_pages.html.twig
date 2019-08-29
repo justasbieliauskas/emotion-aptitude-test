@@ -1,6 +1,6 @@
 <p id="pages" data-current="{{ current }}">
     {% if current > 1 %}
-        {% include "partials/_page-link.html.twig" with {
+        {% include "partials/index/_page-link.html.twig" with {
             page: current - 1,
             title: 'atgal'
         } %}
@@ -9,10 +9,13 @@
         {% if page == current %}
             {{ page }}
         {% else %}
-            {% include "partials/_page-link.html.twig" with {title: page} %}
+            {% include "partials/index/_page-link.html.twig" with {title: page} %}
         {% endif %}
     {% endfor %}
     {% if current < total %}
-        {% include "partials/_page-link.html.twig" with {page: current + 1, title: 'toliau'} %}
+        {% include "partials/index/_page-link.html.twig" with {
+            page: current + 1, 
+            title: 'toliau',
+        } %}
     {% endif %}
 </p>

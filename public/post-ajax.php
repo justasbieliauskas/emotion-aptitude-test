@@ -29,7 +29,7 @@ function getPageHtml($twig): string
         $pageCount
     );
     
-    return $twig->render('partials/_pages.html.twig', [
+    return $twig->render('partials/index/_pages.html.twig', [
         'current' => $currentPage->toInt(),
         'total' => $pageCount->toInt(),
     ]);
@@ -53,7 +53,7 @@ if(fieldsValid($fields)) {
     $dateOfBirth = \DateTime::createFromFormat('Y-m-d', $fields['dateOfBirth']['value']);
     $now = new \DateTime('now', new \DateTimeZone('Europe/Vilnius'));
 
-    $messageHtml = $twig->render('partials/_message.html.twig', [
+    $messageHtml = $twig->render('partials/index/_message.html.twig', [
         'message' => [
             'firstName' => $fields['firstName']['value'],
             'lastName' => $fields['lastName']['value'],

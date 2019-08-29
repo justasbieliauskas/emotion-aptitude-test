@@ -8,14 +8,14 @@
     <body>
         <div id="wrapper">
             <h1>Jūsų žinutės</h1>
-            {% include "partials/_form.html.twig" %}
+            {% include "partials/index/_form.html.twig" %}
 
-            {% include "partials/_messages.html.twig" with {
+            {% include "partials/index/_messages.html.twig" with {
                 perPage: page.perPage,
             } %}
 
             {% if page.total > 1 %}
-                {% include "partials/_pages.html.twig" with {
+                {% include "partials/index/_pages.html.twig" with {
                     current: page.current,
                     total: page.total,
                 } %}

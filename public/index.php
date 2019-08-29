@@ -57,7 +57,7 @@ use App\Entity\DbMessages;
 
 $messages = new DbMessages($sql, $db);
 
-echo $twig->render('main.html.twig', [
+echo $twig->render('index.html.twig', [
     'fields' => $fields,
     'page' => $pageDTO,
     'messages' => $messages,

@@ -5,7 +5,7 @@
         </li>
     {% else %}
         {% for message in messages %}
-            {% include "partials/_message.html.twig" with {
+            {% include "partials/index/_message.html.twig" with {
                 message: message.serialize()
             } %}
         {% endfor %}
