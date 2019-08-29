@@ -41,10 +41,7 @@ use App\Sql\SelectClause;
 use App\Sql\PageLimitClause;
 
 $sql = new PageLimitClause(
-    new OrderClause(
-        new SelectClause('messages'),
-        'id'
-    ),
+    new OrderClause(new SelectClause('messages'), 'id', 'DESC'),
     $currentPage,
     $perPage
 );
